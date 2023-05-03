@@ -1,6 +1,7 @@
 <script lang="ts">
   import Button from "../components/Button.svelte";
   import Header from "../components/Header.svelte";
+  import { createPoll } from "../lib/api";
 
   let pollQuestion = "";
 
@@ -15,17 +16,10 @@
   };
 
   const handleNewPoll = () => {
-    fetch("http://localhost:8080/polls", {
-      method: "POST",
-      body: JSON.stringify({
-        question: pollQuestion,
-        options: pollOptions.map((o) => ({ text: o })),
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
+    createPoll({
+      question: pollQuestion,
+      options: pollOptions.map((o) => ({ text: o })),
     })
-      .then((res) => res.json())
       .then(console.log)
       .catch(console.log);
   };
