@@ -1,26 +1,30 @@
 <script lang="ts">
-  import { validateId } from "./lib/nanoid";
   import New from "./pages/New.svelte";
   import Vote from "./pages/Vote.svelte";
   import Home from "./pages/Home.svelte";
-  import { getNickname } from "./lib/api";
+  import { createUser, getNickname } from "./lib/api";
 
   const route = location.pathname.toLowerCase();
 
-  let username = localStorage.getItem("username");
-  if (!username) {
+  let user = JSON.parse(localStorage.getItem("user"));
+  if (!user) {
     getNickname()
-      .then((nickname) => {
-        username = nickname;
-        localStorage.setItem("username", nickname);
+      .then(createUser)
+      .then((data) => {
+        user = data;
+        localStorage.setItem("user", JSON.stringify(data));
       })
       .catch(console.log);
+  }
+
+  function validateId(id: string) {
+    return id.length === 10 && /[a-z0-9]{10}/g.test(id);
   }
 </script>
 
 <main class="text-center p-2 mx-auto max-w-screen-sm">
   <div class="text-sm font-light text-right px-4 mb-4">
-    Usuario: {username}
+    Usuario: {user?.nickname || "???"}
   </div>
   {#if route === "/nueva-votacion"}
     <New />
