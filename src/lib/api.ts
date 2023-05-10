@@ -24,3 +24,8 @@ export async function createPoll(poll: {question: string, alternatives: {text:st
     })
       .then((res) => res.json());
 }
+
+export async function getPollByCode(code: string) {
+  return fetch(`http://127.0.0.1:8080/polls/${code}`)
+      .then((res) => res.json());
+}

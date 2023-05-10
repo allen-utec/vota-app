@@ -33,7 +33,7 @@
     <li class="flex items-center gap-1">
       <span class="min-w-[20px] text-right">{i + 1}.</span>
       <input
-        placeholder="Ingresa una opción a votar"
+        placeholder="Ingresa una alternativa a votar"
         class="flex-1 border-b px-4 py-2 text-md font-light"
         on:input={handleChangeInput.bind(null, i)}
       />

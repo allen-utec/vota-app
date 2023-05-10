@@ -5,6 +5,7 @@
   import { createUser, getNickname } from "./lib/api";
 
   const route = location.pathname.toLowerCase();
+  const pollCode = route.substring(1);
 
   let user = JSON.parse(localStorage.getItem("user"));
   if (!user) {
@@ -24,12 +25,12 @@
 
 <main class="text-center p-2 mx-auto max-w-screen-sm">
   <div class="text-sm font-light text-right px-4 mb-4">
-    Usuario: {user?.nickname || "???"}
+    Usuario: <strong>{user?.nickname || "???"}</strong>
   </div>
   {#if route === "/nueva-votacion"}
     <New />
-  {:else if validateId(route.substring(1))}
-    <Vote />
+  {:else if validateId(pollCode)}
+    <Vote code={pollCode} />
   {:else}
     <Home />
   {/if}

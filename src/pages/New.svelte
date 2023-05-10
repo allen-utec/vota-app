@@ -26,6 +26,6 @@
   <Button
     on:click={handleCreatePoll}
     classes="text-xl font-light"
-    disabled={!question || !alternatives.length}>CREAR</Button
+    disabled={!question || !alternatives.length}>Crear y Compartir!</Button
   >
 </div>

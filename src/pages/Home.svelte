@@ -9,5 +9,5 @@
 
 <div>
   <Header>Vota!</Header>
-  <Button on:click={handleNewPoll}>Crear</Button>
+  <Button on:click={handleNewPoll}>Crear Una Votación</Button>
 </div>
