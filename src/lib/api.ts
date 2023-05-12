@@ -1,9 +1,11 @@
 export async function getNickname() {
-  return fetch("http://127.0.0.1:9090/nicknames").then((o) => o.json());
+  return fetch(`${import.meta.env.VITE_NICKNAMES_API}/nicknames`).then((o) =>
+    o.json()
+  );
 }
 
 export async function createUser(user: { nickname: string }) {
-  return fetch("http://127.0.0.1:8080/users", {
+  return fetch(`${import.meta.env.VITE_VOTA_API}/users`, {
     method: "POST",
     body: JSON.stringify(user),
     headers: {
@@ -17,7 +19,7 @@ export async function createPoll(poll: {
   alternatives: { text: string }[];
   user_id: string;
 }) {
-  return fetch("http://127.0.0.1:8080/polls", {
+  return fetch(`${import.meta.env.VITE_VOTA_API}/polls`, {
     method: "POST",
     body: JSON.stringify(poll),
     headers: {
@@ -27,14 +29,16 @@ export async function createPoll(poll: {
 }
 
 export async function getPollByCode(code: string) {
-  return fetch(`http://127.0.0.1:8080/polls/${code}`).then((res) => res.json());
+  return fetch(`${import.meta.env.VITE_VOTA_API}/polls/${code}`).then((res) =>
+    res.json()
+  );
 }
 
 export async function sendMyVote(pollId: number, alternativeId: number) {
   let user = JSON.parse(localStorage.getItem("user"));
   if (!user.id) Promise.reject();
 
-  return fetch(`http://127.0.0.1:8080/polls/${pollId}`, {
+  return fetch(`${import.meta.env.VITE_VOTA_API}/polls/${pollId}`, {
     method: "POST",
     body: JSON.stringify({ user_id: user.id, alternative_id: alternativeId }),
     headers: {
