@@ -2,10 +2,11 @@
   import Button from "../components/Button.svelte";
   import Header from "../components/Header.svelte";
   import { getPollByCode, sendMyVote } from "../lib/api";
+  import type { IAlternative, IPoll } from "../lib/types";
 
   export let code: string;
 
-  let poll: { id: number; question: string; alternatives: any[] };
+  let poll: IPoll;
   let alternativeIdSelected = null;
 
   let results: Record<number, number> = null;
@@ -17,7 +18,7 @@
       .catch(console.log);
   }
 
-  const handleSelectOption = (alternative: { id: number }) => {
+  const handleSelectOption = (alternative: IAlternative) => {
     alternativeIdSelected = alternative.id;
   };
 
@@ -49,8 +50,9 @@
     <p class="text-xs text-gray-500/80 font-light mb-2">
       Alternativas a votar:
     </p>
-    <ol class="space-y-2 font-light mb-4 mx-auto">
+    <ol class="space-y-2 font-light mx-auto">
       {#each poll.alternatives as alternative}
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
         <li
           class={`relative flex items-center gap-1 rounded-md p-4 border ${
             results ? "cursor-not-allowed" : "cursor-pointer"
@@ -63,23 +65,37 @@
         >
           {#if results}
             <span
-              class="absolute flex items-center p-4 left-0 top-0 h-full rounded-md border bg-blue-100 border-blue-500"
-              style={`width: ${(results[alternative.id] / totalVotes) * 100}%`}
+              class="absolute flex items-center left-0 top-0 h-full rounded-md border bg-blue-100 border-blue-500"
+              style={`width: ${
+                ((results[alternative.id] || 0) / totalVotes) * 100
+              }%`}
             />
           {/if}
           <span class="z-10">
             {alternative.text}
             {#if results}
               <span class="ml-2 font-bold">
-                [ {((results[alternative.id] / totalVotes) * 100).toFixed(2)}% ]
+                [ {(
+                  ((results[alternative.id] || 0) / totalVotes) *
+                  100
+                ).toFixed(2)}% ]
               </span>
             {/if}
           </span>
         </li>
       {/each}
     </ol>
+    {#if results}
+      <p class="text-xs text-gray-500/80 font-light mt-2">
+        Total de votos: {totalVotes}
+      </p>
+    {/if}
     {#if !results}
-      <Button on:click={handleSend} disabled={!poll.alternatives.length}>
+      <Button
+        on:click={handleSend}
+        disabled={!poll.alternatives.length}
+        classes="mt-4"
+      >
         Enviar Mi Voto!
       </Button>
     {/if}
