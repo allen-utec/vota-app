@@ -18,14 +18,17 @@
     createPoll({ question, alternatives, user_id: user.id })
       .then((o) => {
         poll = o;
-        shareLink = `https://vota.allenjoseph.dev/${poll.code}`;
+        shareLink = `${location.hostname}/${poll.code}`;
       })
       .catch(console.log);
   };
 
   const handleCopy = () => {
-    if (shareLink) {
-      navigator.clipboard.writeText(shareLink);
+    if (shareLink && document.execCommand) {
+      const input = document.getElementById("input-share");
+      input.focus();
+      input.select();
+      document.execCommand('copy');
       linkCopied = true;
     }
   };
@@ -51,9 +54,10 @@
 
     <div class="flex">
       <input
+        id="input-share"
         placeholder="Ingresa una alternativa a votar"
         class="flex-1 border-b px-4 py-2 text-md font-light"
-        disabled
+        readonly
         value={shareLink}
       />
       <Button on:click={handleCopy} classes="active:bg-green-500">
